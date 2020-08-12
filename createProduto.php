@@ -1,7 +1,11 @@
 <?php
 session_start();
+if (!$_SESSION['acesso']){
+  header ('Location: http://localhost/projetos/DesafioPHPSQL/login.php');
+}
 
 include 'sql.php';
+include 'header.php';
 
 $extensoesValidas = ['image/jpeg','image/png', 'image/jpg'];
 $salvo;

@@ -1,7 +1,11 @@
 <?php
 session_start();
+if (!$_SESSION['acesso']){
+  header ('Location: http://localhost/projetos/DesafioPHPSQL/login.php');
+}
 
 include 'sql.php';
+include 'header.php';
 
 $msg='';
 
@@ -20,7 +24,7 @@ if ($_POST) {
         $salvo=$query->execute([':nome'=>$_POST['nomeUsuario'],
                    ':email'=>$_POST['email'],
                    ':senha'=>password_hash($_POST['senha'], PASSWORD_DEFAULT)]);
-        $idInserido = $db->lastInsertId();
+        // $idInserido = $db->lastInsertId();
 }}
 
 if(isset($salvo)){
@@ -30,7 +34,7 @@ if(isset($salvo)){
   $query -> execute();
   $usuarios = $query->fetchAll(PDO::FETCH_ASSOC);
 
-
+// unset($_SESSION['acesso']);
 ?>
 
  <!DOCTYPE html>

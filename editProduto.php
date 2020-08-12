@@ -1,7 +1,11 @@
 <?php
 session_start();
+if (!$_SESSION['acesso']){
+  header ('Location: http://localhost/projetos/DesafioPHPSQL/login.php');
+}
 
 include 'sql.php';
+include 'header.php';
 
 $id = $_GET['id'];
 $extensoesValidas = ['image/jpeg','image/png', 'image/jpg'];
@@ -16,31 +20,38 @@ $query->execute([':id' => $id]);
 
 $produtos=$query->fetchAll(PDO::FETCH_ASSOC);
 
-if ($_FILES) { //verifica se tem files
-  if ($_FILES['foto']['error'] == 0) { //verifica se não tem erro
-    if (array_search($_FILES['foto']['type'], $extensoesValidas) == false) { //valida as extensoes
-      $msg="Extensão do arquivo inválida!<br>"; //se não é valida, imprime msg
-    } else {
-      move_uploaded_file($_FILES['foto']['tmp_name'],'../DesafioPHPSQL/Imagens/'.$id.'.jpg');//se válida, move para a pasta Imagens
-      $query = $db-> prepare("UPDATE produtos SET foto =:foto
-                                              WHERE id = :id;");
-      $salvo=$query->execute([':id' => $id,
-                              ':foto'=>$_FILES['foto']['name']]);}}}
-
-
 if ($_POST){
-        $query = $db-> prepare("UPDATE produtos SET nome = :nome,
-                                                    descricao = :descricao,
-                                                    preco = :preco,
+  if ($_FILES['foto']['name'] != 0) { //verifica se tem files
+    if ($_FILES['foto']['error'] == 0) { //verifica se não tem erro
+      if (array_search($_FILES['foto']['type'], $extensoesValidas) == false) { //valida as extensoes
+          $msg="Extensão do arquivo inválida!<br>";}
+        else {
+        move_uploaded_file($_FILES['foto']['tmp_name'],'../DesafioPHPSQL/Imagens/'.$id.'.jpg');
+        $query = $db-> prepare("UPDATE produtos SET   nome = :nome,
+                                                      descricao = :descricao,
+                                                      preco = :preco,
+                                                      foto = :foto
                                                 WHERE id = :id;");
         $salvo=$query->execute([':id' => $id,
                                 ':nome'=>$_POST['nomeProduto'],
                                 ':descricao'=>$_POST['descricao'],
-                                ':preco'=>$_POST['preco']]);}
+                                ':preco'=>$_POST['preco'],
+                                ':foto'=>$_FILES['foto']['name']]);}}//se válida, move para a pasta Imagens
+      } else {
+        $query = $db-> prepare("UPDATE produtos SET nome = :nome,
+                                                    descricao = :descricao,
+                                                    preco = :preco
+                                              WHERE id = :id;");
+        $salvo=$query->execute([':id' => $id,
+                                ':nome'=>$_POST['nomeProduto'],
+                                ':descricao'=>$_POST['descricao'],
+                                ':preco'=>$_POST['preco']]);}}//se válida, move para a pasta Imagens}
 
-
+// var_dump($_POST);
+// var_dump($_FILES);
 if(isset($salvo)){
-  header ('Location: http://localhost/projetos/DesafioPHPSQL/indexProdutos.php'); }
+  header ('Location: http://localhost/projetos/DesafioPHPSQL/indexProdutos.php');}
+
 ?>
 
 <!DOCTYPE html>
