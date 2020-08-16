@@ -21,24 +21,28 @@
     <meta charset="utf-8">
     <title></title>
   </head>
-  <body>
-    <table border="1">
-      <tr>
-        <td>ID</td>
-        <td>Produto</td>
-        <td>Descrição</td>
-        <td>Preço</td>
-        <td>Link</td>
-      </tr>
-      <?php foreach ($produtos as $produto) : ?>
-      <tr>
-        <td><?= $produto['ID']?> </td>
-        <td><?= $produto['NOME']?> </td>
-        <td><?= $produto['DESCRICAO']?> </td>
-        <td><?= $produto['PRECO']?> </td>
-        <td><a href="showProduto.php?id=<?= $produto['ID']?>">Ver Produto</td>
-      </tr>
-    <?php endforeach; ?>
-  </table>
+  <body class="text-center">
+    <br><br>
+    <div class="container">
+      <table class="table table-striped table-dark">
+        <tr class="font-weight-bold">
+          <td><h3>ID</h3></td>
+          <td><h3>PRODUTO</h3></td>
+          <td><h3>DESCRIÇÃO</h3></td>
+          <td><h3>PREÇO</h3></td>
+          <td></td>
+        </tr>
+        <?php foreach ($produtos as $produto) : ?>
+        <tr>
+          <td class="font-weight-bold"><?= $produto['ID']?> </td>
+          <td class="text-uppercase"><?= $produto['NOME']?> </td>
+          <td><?= $produto['DESCRICAO']?> </td>
+          <td>R$ <?= $produto['PRECO']?> </td>
+          <td><a class="text-white font-weight-bold" href="showProduto.php?id=<?= $produto['ID']?>">Ver Produto</td>
+        </tr>
+      <?php endforeach; ?>
+    </table>
+    </div>
+
   </body>
   </html>
